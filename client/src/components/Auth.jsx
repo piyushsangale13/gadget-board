@@ -1,7 +1,7 @@
 import axios from 'axios';
-import config from "../config/config.json";
+import jwtDecode from 'jwt-decode';
 
-const API_URL = `${config.API.BASE_URL}/api/auth`;
+const API_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auth`;
 
 // Login user
 export const login = async (email, password) => {
@@ -46,7 +46,25 @@ export const logout = () => {
 // Check if user is authenticated
 export const isAuthenticated = () => {
     const token = localStorage.getItem('token');
-    return token !== null; // Return true if token exists
+    if (!token) return false;
+
+    try {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000; // Current time in seconds
+
+        // Check if token has expired
+        if (decodedToken.exp < currentTime) {
+            // Token has expired, remove it from localStorage
+            localStorage.removeItem('token');
+            return false;
+        }
+
+        return true; // Token is valid
+    } catch (error) {
+        // If there's an error in decoding the token, it's invalid
+        console.error('Invalid token', error);
+        return false;
+    }
 };
 
 // Get Auth Token
