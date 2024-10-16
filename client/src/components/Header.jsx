@@ -52,13 +52,41 @@ function Header() {
 
             {/* Center: Links (Hidden on small screens) */}
             <div className="hidden lg:flex lg:flex-grow lg:justify-center lg:gap-x-12">
-                <Link to="/" className="font-semibold leading-6 text-gray-900">Home</Link>
-                <Link to="/mobile" className="font-semibold leading-6 text-gray-900">Mobiles</Link>
+                <Link to="/home" className="font-semibold leading-6 text-gray-900">Home</Link>
+                <Link to="/group" className="font-semibold leading-6 text-gray-900">Groups</Link>
                 <Link to="/community" className="font-semibold leading-6 text-gray-900">Community</Link>
             </div>
 
             {/* Right: Avatar and Menu Icon (Menu button visible only on small screens) */}
-            <div className="hidden sm:flex items-center justify-end space-x-4">
+            <div className="flex lg:hidden items-center justify-end space-x-4">
+                {isLoggedIn ? (
+                    <Avatar
+                        alt="User Avatar"
+                        src=""
+                        sx={{ width: 32, height: 32 }}
+                        className="cursor-pointer"
+                        onClick={handleAvatarClick}
+                    />
+                ) : (
+                    <Link to="/login" className="font-semibold leading-6 text-gray-900">
+                        Log in <span aria-hidden="true">&rarr;</span>
+                    </Link>
+                )}
+
+                {/* Mobile Menu Icon */}
+                <button
+                    ref={menuButtonRef}
+                    type="button"
+                    className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+                    onClick={toggleMenu}
+                >
+                    <MenuIcon />
+                    <span className="sr-only">Open main menu</span>
+                </button>
+            </div>
+
+            {/* Right (Desktop View) */}
+            <div className="hidden lg:flex items-center justify-end space-x-4">
                 {isLoggedIn ? (
                     <>
                         <Avatar
@@ -82,19 +110,6 @@ function Header() {
                 )}
             </div>
 
-            {/* Mobile Menu Icon */}
-            <div className="lg:hidden">
-                <button
-                    ref={menuButtonRef}
-                    type="button"
-                    className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
-                    onClick={toggleMenu}
-                >
-                    <MenuIcon />
-                    <span className="sr-only">Open main menu</span>
-                </button>
-            </div>
-
             {/* Mobile Menu */}
             {menuOpen && (
                 <div
@@ -102,8 +117,8 @@ function Header() {
                     className="absolute top-16 left-0 right-0 bg-white shadow-lg lg:hidden"
                 >
                     <div className="flex flex-col items-center p-4">
-                        <Link to="/" className="block font-semibold leading-6 text-gray-900 py-2">Home</Link>
-                        <Link to="/mobile" className="block font-semibold leading-6 text-gray-900 py-2">Mobiles</Link>
+                        <Link to="/home" className="block font-semibold leading-6 text-gray-900 py-2">Home</Link>
+                        <Link to="/group" className="block font-semibold leading-6 text-gray-900 py-2">Groups</Link>
                         <Link to="/community" className="block font-semibold leading-6 text-gray-900 py-2">Community</Link>
                         {isLoggedIn ? (
                             <button

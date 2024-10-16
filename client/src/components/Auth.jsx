@@ -1,5 +1,5 @@
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 const API_URL = `${process.env.REACT_APP_API_BASE_URL}/api/auth`;
 
@@ -79,5 +79,23 @@ export const authHeader = () => {
         return { Authorization: `Bearer ${token}` };
     } else {
         return {};
+    }
+};
+
+// Get info from saved token
+export const getTokenInfo = () => {
+    const token = getToken();
+    if (!token) return null;
+
+    try {
+        const decodedToken = jwtDecode(token);
+        
+        // Assuming the token contains the user information like firstName, lastName, etc.
+        const { firstName, lastName, email } = decodedToken;
+        
+        return { firstName, lastName, email };
+    } catch (error) {
+        console.error('Error decoding token:', error);
+        return null;
     }
 };
